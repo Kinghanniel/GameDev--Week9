@@ -1,73 +1,86 @@
 using UnityEngine;
+using System.Collections;
 using GameDevWithhanniel.CameraStuff;
 using GameDevWithhanniel.DesignPattern;
 
-
 namespace GameDevWithhanniel.Player
 {
-
-
     public class Player_Shooting : MonoBehaviour
     {
         [SerializeField] Transform tipOfTheBarrel;
         [SerializeField] Transform ejectionPort;
         [SerializeField] float bulletSpeed;
-        Player_Movement playerMovementRef;
-        Rigidbody2D rb;
         [SerializeField] float pushBackForce;
         [SerializeField] GameEvent bulletShot;
         [SerializeField] GameObject muzzleFlash;
         [SerializeField] ParticleSystem sparks;
+
+        [SerializeField] float defaultRPM = 600f; // Default Rounds Per Minute
+        private float currentRPM;
+        private float fireRate; // Time between shots
+        private float lastFireTime;
+
+        Player_Movement playerMovementRef;
+        Rigidbody2D rb;
 
         private void Start()
         {
             Cursor.visible = false;
             playerMovementRef = GetComponent<Player_Movement>();
             rb = GetComponent<Rigidbody2D>();
+
+            currentRPM = defaultRPM; // Set starting RPM
+            fireRate = 60f / currentRPM; // Calculate time between shots
         }
-        // Update is called once per frame
-        void Update()
+
+        private void Update()
         {
-            if (Input.GetButtonDown("Fire1"))
+            // Handle firing with cooldown
+            if (Input.GetButton("Fire1") && Time.time >= lastFireTime + fireRate)
             {
                 Fire();
+                lastFireTime = Time.time; // Update the last fire time
             }
         }
 
         void Fire()
         {
-            //Spawns the bullet
+            // Spawns the bullet
             GameObject spawnedBullet = ObjectPoolingPattern.Instance.GetPoolItem(ObjectPoolingPattern.TypeOfPool.BulletePool);
 
-            //Make the bullet be in the right position
+            // Make the bullet be in the right position
             if (spawnedBullet != null) spawnedBullet.transform.position = tipOfTheBarrel.transform.position;
-   
-            //Random bullet scale
+
+            // Random bullet scale
             RandomiseBulletSize(spawnedBullet);
-            //Fires the bullet
+
+            // Fires the bullet
             Rigidbody2D bulletsRb = spawnedBullet.GetComponent<Rigidbody2D>();
             FireBulletInRightDirection(bulletsRb);
-            //Does a pushback
+
+            // Does a pushback
             PushBack();
-            //Raises the event
+
+            // Raise the event
             bulletShot.Raise();
-            //Fires the ripple effect
+
+            // Fire the ripple effect
             CameraRippleEffect.Instance.Ripple(tipOfTheBarrel.transform.position);
+
             MuzzleFlashLogic();
-            //Plays the sparks particles
+
+            // Play the sparks particles
             sparks.Play();
         }
 
         void MuzzleFlashLogic()
         {
-            //Muzzle flash code
             var muzzleFlashObject = ObjectPoolingPattern.Instance.GetPoolItem(ObjectPoolingPattern.TypeOfPool.MuzzleFlash);
             if (muzzleFlashObject != null)
             {
                 float randomValue = Random.Range(0.8f, 1.25f);
                 muzzleFlashObject.transform.localScale = new Vector3(randomValue, randomValue, randomValue);
 
-                // Align the muzzle flash with the tip of the barrel
                 muzzleFlashObject.transform.position = tipOfTheBarrel.position;
                 muzzleFlashObject.transform.rotation = tipOfTheBarrel.rotation;
 
@@ -78,17 +91,13 @@ namespace GameDevWithhanniel.Player
 
         private void FireBulletInRightDirection(Rigidbody2D bulletsRb)
         {
-            // Determine the direction of the shot based on the gun's rotation
-            Vector2 shootDirection = tipOfTheBarrel.right; // Use the barrel's local right direction for the bullet's movement.
+            Vector2 shootDirection = tipOfTheBarrel.right;
 
-            // Rotate the bullet to face the shoot direction
             float angle = Mathf.Atan2(shootDirection.y, shootDirection.x) * Mathf.Rad2Deg;
             bulletsRb.transform.rotation = Quaternion.Euler(0, 0, angle);
 
-            // Apply force in the shoot direction
             bulletsRb.AddForce(shootDirection * bulletSpeed * 100);
         }
-
 
         private void RandomiseBulletSize(GameObject spawnedBullet)
         {
@@ -107,8 +116,20 @@ namespace GameDevWithhanniel.Player
                 rb.AddForce(Vector2.right * pushBackForce * 100);
             }
         }
+
+        // Modify RPM (called by collectible)
+        public void ModifyRPM(float addedRPM, float duration)
+        {
+            StartCoroutine(BoostRPM(addedRPM, duration));
+        }
+
+        private IEnumerator BoostRPM(float addedRPM, float duration)
+        {
+            currentRPM += addedRPM; // Increase RPM
+            fireRate = 60f / currentRPM; // Recalculate fire rate
+            yield return new WaitForSeconds(duration); // Wait for the boost duration
+            currentRPM -= addedRPM; // Revert RPM
+            fireRate = 60f / currentRPM; // Recalculate fire rate
+        }
     }
-
-
 }
-
