@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace GameDevWithNey.Player
+namespace GameDevWithhanniel.Player
 {
     public class Player_MuzzleFlash : MonoBehaviour
     {

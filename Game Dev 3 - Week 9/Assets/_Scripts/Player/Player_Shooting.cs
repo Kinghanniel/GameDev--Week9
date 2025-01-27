@@ -1,9 +1,9 @@
 using UnityEngine;
-using GameDevWithNey.CameraStuff;
-using GameDevWithNey.DesignPattern;
+using GameDevWithhanniel.CameraStuff;
+using GameDevWithhanniel.DesignPattern;
 
 
-namespace GameDevWithNey.Player
+namespace GameDevWithhanniel.Player
 {
 
 

@@ -1,10 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using GameDevWithNey.DesignPattern;
+using GameDevWithhanniel.DesignPattern;
 
 
-namespace GameDevWithNey.CameraStuff
+namespace GameDevWithhanniel.CameraStuff
 {
     public class CameraRippleEffect : Singleton<CameraRippleEffect>
     {

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace GameDevWithNey.DesignPattern
+namespace GameDevWithhanniel.DesignPattern
 {
     public class ObjectPoolingPattern : Singleton<ObjectPoolingPattern>
     {

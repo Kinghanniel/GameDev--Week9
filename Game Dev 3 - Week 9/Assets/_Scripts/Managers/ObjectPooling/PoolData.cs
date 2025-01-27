@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace GameDevWithNey
+namespace GameDevWithhanniel
 {
     [CreateAssetMenu(fileName = "Pool", menuName = "Scriptable Objects/Pool")]
     public class PoolData : ScriptableObject

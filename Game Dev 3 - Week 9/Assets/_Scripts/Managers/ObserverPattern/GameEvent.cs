@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-namespace GameDevWithNey.DesignPattern
+namespace GameDevWithhanniel.DesignPattern
 {
 
 

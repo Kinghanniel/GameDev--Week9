@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace GameDevWithNey.Crosshair
+namespace GameDevWithhanniel.Crosshair
 {
     public class Crosshair_Control : MonoBehaviour
     {

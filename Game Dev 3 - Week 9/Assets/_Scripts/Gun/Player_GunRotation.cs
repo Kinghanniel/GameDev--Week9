@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace GameDevWithNey.Player
+namespace GameDevWithhanniel.Player
 {
     public class Player_GunRotation : MonoBehaviour
     {

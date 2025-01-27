@@ -5,7 +5,7 @@ using UnityEngine;
 //The where T part will allow us to use this on any script since T is a generic type and
 //can accept anything.
 
-namespace GameDevWithNey.DesignPattern
+namespace GameDevWithhanniel.DesignPattern
 {
     public abstract class Singleton<T> : MonoBehaviour where T : MonoBehaviour
     {
