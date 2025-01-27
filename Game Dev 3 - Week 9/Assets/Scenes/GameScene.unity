@@ -2674,8 +2674,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   RippleMaterial: {fileID: 2100000, guid: 392dee8c9debe914b92ba536ecb1912a, type: 2}
-  MaxAmount: 50
-  Friction: 0.9
+  MaxAmount: 23.3
+  Friction: 0.716
   ripplePos: {x: 0, y: 0}
 --- !u!1 &648671526
 GameObject:
@@ -3251,7 +3251,7 @@ MonoBehaviour:
   tipOfTheBarrel: {fileID: 511844573}
   ejectionPort: {fileID: 1359726991}
   bulletSpeed: 10
-  pushBackForce: 2
+  pushBackForce: 0.8
   bulletShot: {fileID: 11400000, guid: 6bfb8f60e4393fd45910d0451f178df8, type: 2}
   muzzleFlash: {fileID: 4667825704754077554, guid: beb9e7237d72de44f90d937a39a0f4c4, type: 3}
   sparks: {fileID: 7593326967725081828}
