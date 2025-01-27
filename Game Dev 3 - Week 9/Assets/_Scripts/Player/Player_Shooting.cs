@@ -1,6 +1,6 @@
 using UnityEngine;
-using System.Collections;
 using GameDevWithhanniel.CameraStuff;
+using System.Collections;
 using GameDevWithhanniel.DesignPattern;
 
 namespace GameDevWithhanniel.Player
@@ -9,15 +9,17 @@ namespace GameDevWithhanniel.Player
     {
         [SerializeField] Transform tipOfTheBarrel;
         [SerializeField] Transform ejectionPort;
-        [SerializeField] float bulletSpeed;
+        [SerializeField] float defaultRPM = 600f; // Default Rounds Per Minute
+        [SerializeField] float minBulletSpeed = 10f; // Minimum bullet speed
+        [SerializeField] float maxBulletSpeed = 50f; // Maximum bullet speed
         [SerializeField] float pushBackForce;
         [SerializeField] GameEvent bulletShot;
         [SerializeField] GameObject muzzleFlash;
         [SerializeField] ParticleSystem sparks;
 
-        [SerializeField] float defaultRPM = 600f; // Default Rounds Per Minute
         private float currentRPM;
-        private float fireRate; // Time between shots
+        private float fireRate; // Time between shots (calculated from RPM)
+        private float bulletSpeed; // Calculated based on RPM
         private float lastFireTime;
 
         Player_Movement playerMovementRef;
@@ -29,8 +31,8 @@ namespace GameDevWithhanniel.Player
             playerMovementRef = GetComponent<Player_Movement>();
             rb = GetComponent<Rigidbody2D>();
 
-            currentRPM = defaultRPM; // Set starting RPM
-            fireRate = 60f / currentRPM; // Calculate time between shots
+            currentRPM = defaultRPM;
+            UpdateFireRateAndBulletSpeed();
         }
 
         private void Update()
@@ -45,31 +47,30 @@ namespace GameDevWithhanniel.Player
 
         void Fire()
         {
-            // Spawns the bullet
+            // Spawn the bullet
             GameObject spawnedBullet = ObjectPoolingPattern.Instance.GetPoolItem(ObjectPoolingPattern.TypeOfPool.BulletePool);
 
-            // Make the bullet be in the right position
-            if (spawnedBullet != null) spawnedBullet.transform.position = tipOfTheBarrel.transform.position;
+            if (spawnedBullet != null)
+            {
+                spawnedBullet.transform.position = tipOfTheBarrel.transform.position;
+                RandomiseBulletSize(spawnedBullet);
 
-            // Random bullet scale
-            RandomiseBulletSize(spawnedBullet);
+                // Fire bullet
+                Rigidbody2D bulletsRb = spawnedBullet.GetComponent<Rigidbody2D>();
+                FireBulletInRightDirection(bulletsRb);
+            }
 
-            // Fires the bullet
-            Rigidbody2D bulletsRb = spawnedBullet.GetComponent<Rigidbody2D>();
-            FireBulletInRightDirection(bulletsRb);
-
-            // Does a pushback
+            // Pushback
             PushBack();
 
             // Raise the event
             bulletShot.Raise();
 
-            // Fire the ripple effect
+            // Fire ripple effect
             CameraRippleEffect.Instance.Ripple(tipOfTheBarrel.transform.position);
 
+            // Handle muzzle flash and sparks
             MuzzleFlashLogic();
-
-            // Play the sparks particles
             sparks.Play();
         }
 
@@ -96,7 +97,7 @@ namespace GameDevWithhanniel.Player
             float angle = Mathf.Atan2(shootDirection.y, shootDirection.x) * Mathf.Rad2Deg;
             bulletsRb.transform.rotation = Quaternion.Euler(0, 0, angle);
 
-            bulletsRb.AddForce(shootDirection * bulletSpeed * 100);
+            bulletsRb.AddForce(shootDirection * bulletSpeed * 100); // Use calculated bulletSpeed
         }
 
         private void RandomiseBulletSize(GameObject spawnedBullet)
@@ -117,7 +118,7 @@ namespace GameDevWithhanniel.Player
             }
         }
 
-        // Modify RPM (called by collectible)
+        // Adjust RPM and update fire rate and bullet speed
         public void ModifyRPM(float addedRPM, float duration)
         {
             StartCoroutine(BoostRPM(addedRPM, duration));
@@ -125,11 +126,17 @@ namespace GameDevWithhanniel.Player
 
         private IEnumerator BoostRPM(float addedRPM, float duration)
         {
-            currentRPM += addedRPM; // Increase RPM
-            fireRate = 60f / currentRPM; // Recalculate fire rate
-            yield return new WaitForSeconds(duration); // Wait for the boost duration
-            currentRPM -= addedRPM; // Revert RPM
-            fireRate = 60f / currentRPM; // Recalculate fire rate
+            currentRPM += addedRPM;
+            UpdateFireRateAndBulletSpeed(); // Recalculate fire rate and bullet speed
+            yield return new WaitForSeconds(duration);
+            currentRPM -= addedRPM;
+            UpdateFireRateAndBulletSpeed(); // Revert to original values
+        }
+
+        private void UpdateFireRateAndBulletSpeed()
+        {
+            fireRate = 60f / currentRPM; // Convert RPM to time between shots
+            bulletSpeed = Mathf.Lerp(minBulletSpeed, maxBulletSpeed, currentRPM / 100f); // Scale bullet speed based on RPM
         }
     }
 }
