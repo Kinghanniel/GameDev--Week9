@@ -18,6 +18,11 @@ namespace GameDevWithhanniel.Player
             Physics2D.IgnoreLayerCollision(playerLayer, bulletLayer);
         }
 
+        private void Update()
+        {
+            StartCoroutine(deactivatebullet());  
+        }
+
         private void OnCollisionEnter2D(Collision2D collision)
         {
             // To get where specifically I have collided 
@@ -44,6 +49,11 @@ namespace GameDevWithhanniel.Player
             {
                 Debug.Log("Player");
             }
+        }
+        IEnumerator deactivatebullet()
+        {
+            yield return new WaitForSeconds(4);
+            gameObject.SetActive(false); 
         }
     }
 }
