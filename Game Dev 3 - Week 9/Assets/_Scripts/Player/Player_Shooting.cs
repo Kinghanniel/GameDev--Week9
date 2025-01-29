@@ -1,7 +1,7 @@
-using UnityEngine;
-using GameDevWithhanniel.CameraStuff;
 using System.Collections;
+using GameDevWithhanniel.CameraStuff;
 using GameDevWithhanniel.DesignPattern;
+using UnityEngine;
 
 namespace GameDevWithhanniel.Player
 {

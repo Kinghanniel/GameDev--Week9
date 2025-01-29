@@ -1,6 +1,5 @@
-using GameDevWithhanniel.DesignPattern;
 using System.Collections;
-using System.Collections.Generic;
+using GameDevWithhanniel.DesignPattern;
 using UnityEngine;
 
 
@@ -20,7 +19,7 @@ namespace GameDevWithhanniel.Player
 
         private void Update()
         {
-            StartCoroutine(deactivatebullet());  
+            StartCoroutine(deactivatebullet());
         }
 
         private void OnCollisionEnter2D(Collision2D collision)
@@ -53,7 +52,7 @@ namespace GameDevWithhanniel.Player
         IEnumerator deactivatebullet()
         {
             yield return new WaitForSeconds(4);
-            gameObject.SetActive(false); 
+            gameObject.SetActive(false);
         }
     }
 }

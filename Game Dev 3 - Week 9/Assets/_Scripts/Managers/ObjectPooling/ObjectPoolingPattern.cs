@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace GameDevWithhanniel.DesignPattern
@@ -8,7 +6,7 @@ namespace GameDevWithhanniel.DesignPattern
     {
         [SerializeField] PoolData bulletPool;
         [SerializeField] PoolData muzzleFlashPool;
-       
+
         public enum TypeOfPool
         {
             BulletePool,
@@ -25,7 +23,7 @@ namespace GameDevWithhanniel.DesignPattern
         // Update is called once per frame
         void Update()
         {
-        
+
         }
 
         private void FillThePool(PoolData poolData)
@@ -46,22 +44,22 @@ namespace GameDevWithhanniel.DesignPattern
 
         public GameObject GetPoolItem(TypeOfPool poolToUse)
         {
-           PoolData pool =  ScriptableObject.CreateInstance<PoolData>();
+            PoolData pool = ScriptableObject.CreateInstance<PoolData>();
             switch (poolToUse)
-            { 
+            {
                 case TypeOfPool.BulletePool:
                     pool = bulletPool;
                     break;
                 case TypeOfPool.MuzzleFlash:
                     pool = muzzleFlashPool;
                     break;
-            
-            
+
+
             }
 
 
 
-            for (int i = 0;i < pool.pooledObjectContainer.Count; i++)
+            for (int i = 0; i < pool.pooledObjectContainer.Count; i++)
             {
                 if (!pool.pooledObjectContainer[i].activeInHierarchy)
                 {

@@ -1,7 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using GameDevWithhanniel.DesignPattern;
 using UnityEngine;
-using GameDevWithhanniel.DesignPattern;
 
 
 namespace GameDevWithhanniel.CameraStuff

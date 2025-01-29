@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -12,7 +11,7 @@ namespace GameDevWithhanniel
         [SerializeField] public int poolAmount = 40;
         [SerializeField] public GameObject poolItem;
         // Start is called before the first frame update
-        
+
 
         public void ResetThePool()
         {

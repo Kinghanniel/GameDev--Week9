@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace GameDevWithhanniel.Player
@@ -7,7 +6,7 @@ namespace GameDevWithhanniel.Player
     public class Player_MuzzleFlash : MonoBehaviour
     {
 
-       
+
         public IEnumerator ReturnToThePool()
         {
             yield return new WaitForSeconds(1);
